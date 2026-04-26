@@ -1,0 +1,56 @@
+======================================================
+     HOW THE SMART LIBRARY SYSTEM WORKS
+======================================================
+
+1. APPLICATION OVERVIEW
+------------------------------------------------------
+When you launch the program by running Main.java, a beautiful graphical window opens. The application starts with "Sample Data" pre-loaded to make it easy to test right away. This includes 10 books and 4 students (IDs S101, S102, S103, and S104).
+
+The user interface is organized into 7 easy-to-use tabs at the top.
+
+2. TAB-BY-TAB GUIDE
+------------------------------------------------------
+TAB 1: 📖 Catalogue
+- What it does: Shows a list of every book in the library in a neat table.
+- Features: You can use the "Search" bar to find books by typing in a Title, Author, Book ID, or Genre. The table shows the live status of the book (AVAILABLE or BORROWED), who has borrowed it, and the due date.
+
+TAB 2: ➕ Add Book
+- What it does: Allows you to add a brand new book to the library system.
+- How to use: Enter a unique Book ID (e.g., B011), the Title, Author, and select a Genre from the dropdown menu. Click "Add Book" and it instantly appears in the Catalogue.
+
+TAB 3: 🎓 Register Student
+- What it does: Registers a new student so they are allowed to borrow books.
+- How to use: Enter a unique, alphanumeric Student ID (e.g., S105) and their Full Name. A student must be registered here before they can use the Borrow tab.
+
+TAB 4: 📤 Borrow
+- What it does: Assigns a book to a student.
+- How to use: Enter a registered Student ID and an Available Book ID.
+- Behind the scenes: 
+  * The system checks if the student is registered.
+  * Checks if the book actually exists and is not currently borrowed.
+  * Checks if the student has exceeded their borrow limit (Max 3 books).
+  * If all is well, the book is marked "BORROWED" and given a due date 14 days in the future.
+
+TAB 5: 📥 Return
+- What it does: Returns a borrowed book back to the library.
+- How to use: Enter the Student ID and the Book ID they are returning.
+- Behind the scenes: The system verifies that the book was actually borrowed by that specific student, and then resets the book's status back to "AVAILABLE".
+
+TAB 6: 📋 Activity Log
+- What it does: Keeps a running history of all library transactions.
+- How it works: Every time a book is added, a student is registered, or a book is borrowed/returned, the system saves a timestamped message here. It uses an ArrayDeque (Last-In-First-Out) so the newest activity is always at the top.
+
+TAB 7: ⚡ Simulate (Multithreading Demo)
+- What it does: Visually proves that the system is "Thread-Safe".
+- How to use: Click "Run Simulation".
+- Behind the scenes: The system launches multiple invisible student threads at the exact same millisecond. They all try to grab random books simultaneously. You will see an output log proving that the system handled the traffic perfectly without crashing, thanks to the "synchronized" keyword protecting the data.
+
+3. BACKGROUND PROCESSES
+------------------------------------------------------
+Look at the top right corner of the window. You will see a label that says "⏰ Overdue: X book(s)". 
+- How it works: There is an invisible Background Thread running silently while you use the app.
+- Every 30 seconds, this thread scans the entire library looking for books where the due date has passed. If it finds any, it organizes them in a PriorityQueue and updates the red counter on the screen automatically.
+
+4. ERROR HANDLING
+------------------------------------------------------
+If you make a mistake (like trying to borrow a book that is already taken, or entering an invalid Student ID), the system will not crash. Instead, our Custom Exceptions will catch the error and show a polite error popup dialog box explaining exactly what went wrong.
